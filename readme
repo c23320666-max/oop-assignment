@@ -1,0 +1,13 @@
+Object Orianted Programming Assignment2025
+
+Author: Marcus Penkert
+
+About:
+My project show cases inheritence, encapsulation, understanding of logic, interfaces,
+abstract classes, adding data, searching for data and file processing. I created 2 file processing classes to display inheritence.
+One is an interface which initalises the methods such as search, read and print, display statistics
+and add new data. The second file processing class implements these methods and over rides them to
+add functionality. When you run the program the terminal show a menu display message with options
+the user can do to display different thing. I used a switxh case in the main method for extra
+functionality as i could create an infinite loop where the user can keep selecting options instead
+of re running the program until 0 is selected which purposfully ends the program.

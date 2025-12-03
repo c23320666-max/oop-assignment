@@ -1,0 +1,164 @@
+package marcusPenkertAssignment;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+public abstract class fileProcessor1 implements interface1
+{
+	protected final String fileName;
+
+	// constructor
+    public fileProcessor1(String fileName)
+    {
+        this.fileName = fileName;
+    }
+
+    // getter
+    public String getFileName()
+    {
+        return fileName;
+    }
+    
+    // reads and prints the file
+    @Override
+    public void readFile()
+    {
+    	// display file name
+        System.out.println("Content of: " + this.fileName);
+        try (BufferedReader reader = new BufferedReader(new FileReader(this.fileName)))
+        {
+        	// data
+            String line;
+            
+            // index for data rows
+            int lineNumber = 1;
+            
+            // check for valid data (empty entry)
+            while ((line = reader.readLine()) != null)
+            {
+                System.out.println((lineNumber++) +":" + " " + line);
+            }
+            
+        } catch (FileNotFoundException e)
+        {
+            System.out.println("File not found");
+        } catch (IOException e)
+        {
+            System.out.println("error 404 " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void searchWord(String word)
+    {
+    	// valid word check (empty word)
+        if (word == null || word.trim().isEmpty())
+        {
+            System.out.println("invalid word");
+            return;
+        }
+
+        // counts word appearences
+        int totalOccurrences = 0;
+        
+        // converts input to lower case to search
+        String searchLower = word.toLowerCase();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(this.fileName)))
+        {
+            String line;
+            while ((line = reader.readLine()) != null) // end of data in file
+            {
+                String lineLower = line.toLowerCase();
+                
+                // Count how many times it appears
+                int lineCount = 0;
+                
+                // keep track of file index
+                int lastIndex = 0;
+                
+                while (lastIndex != -1) // end of data in the file
+                {
+                    lastIndex = lineLower.indexOf(searchLower, lastIndex);
+                    if (lastIndex != -1)
+                    {
+                        lineCount++;
+                        lastIndex += searchLower.length(); // Move past the found word
+                    }
+                }
+                totalOccurrences += lineCount;
+            }
+
+            System.out.println("the word " + word + " was found " + totalOccurrences + " times");
+
+        } catch (FileNotFoundException e)
+        {
+            System.out.println("File not found " + e.getMessage());
+        } catch (IOException e)
+        {
+            System.out.println("error 404 " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void addData(String data)
+    {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(this.fileName, true)))
+        {
+        	// writes new data to the file
+            writer.println(data);
+            System.out.println("added new data");
+        } catch (IOException e)
+        {
+            System.out.println("Could not write data to the file " + e.getMessage());
+        }
+    }
+    
+    @Override
+    public void displayStatistics()
+    {
+    	// tracker variables for logic with statistics
+        long dataEntries = 0;
+        long totalLength = 0;
+        
+        System.out.println("Statistics for: " + this.fileName);
+        try (BufferedReader reader = new BufferedReader(new FileReader(this.fileName)))
+        { 
+            
+            String line;
+            while ((line = reader.readLine()) != null)
+            {
+                // track the amount of data entries
+                dataEntries++;
+                
+                // track the word count in data lines in total
+                totalLength += line.length();
+            }
+            
+            if (dataEntries > 0)
+            {
+                // Calculate average length of data
+                double averageLength = (double) totalLength / dataEntries;
+                
+                // display statistics
+                System.out.println("Total Data Entries: " + dataEntries);
+                System.out.println("Average Length of Data Entries: " + averageLength);
+            } else
+            {
+                System.out.println("The file contains 0 data entries.");
+            }
+            
+        } catch (FileNotFoundException e)
+        {
+            System.out.println("File not found");
+        } catch (IOException e)
+        {
+            System.out.println("An error occurred " + e.getMessage());
+        }
+    }
+}

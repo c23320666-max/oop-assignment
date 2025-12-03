@@ -1,0 +1,16 @@
+package marcusPenkertAssignment;
+
+public interface interface1
+{
+	// Reads the file
+    void readFile();
+
+    //Searches the file for a word
+    void searchWord(String word);
+
+    //Adds data to the file
+    void addData(String data);
+    
+    //void to display statistics
+    void displayStatistics();
+}
